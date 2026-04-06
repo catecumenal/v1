@@ -534,6 +534,30 @@
         };
 
         function getMysteryType() {
+            // Primero verificar si hay un parámetro URL type=
+            const urlParams = new URLSearchParams(window.location.search);
+            const typeParam = urlParams.get('type');
+            
+            if (typeParam) {
+                // Mapeo de parámetros a tipos de misterios
+                const typeMap = {
+                    'glorioso': 'glorious',
+                    'gloriosos': 'glorious',
+                    'gozoso': 'joyful',
+                    'gozosos': 'joyful',
+                    'doloroso': 'sorrowful',
+                    'dolorosos': 'sorrowful',
+                    'luminoso': 'luminous',
+                    'luminosos': 'luminous'
+                };
+                
+                const normalized = typeParam.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                if (typeMap[normalized]) {
+                    return typeMap[normalized];
+                }
+            }
+            
+            // Si no hay parámetro, usar el día de la semana
             const today = new Date();
             const dayOfWeek = today.getDay();
 
