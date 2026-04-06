@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Santo Rosario - Misterios del Día</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="apple-touch-icon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Santo Rosario">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #c9a227;
+            --gold-light: #f0e6d3;
+            --deep-blue: #1a3a6e;
+            --burgundy: #8b1538;
+            --cream: #faf8f5;
+            --text-dark: #2c2c2c;
+            --vatican-white: #ffffff;
+            --vatican-yellow: #ffd700;
+            --papal-red: #aa1d39;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(180deg, #faf8f5 0%, #f0ebe3 50%, #e8e0d5 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(201, 162, 39, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(201, 162, 39, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .rosary-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #8b6914;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #6b5344;
+            font-style: italic;
+            opacity: 0.9;
+        }
+
+        .today-info {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(201, 162, 39, 0.2);
+        }
+
+        .today-date {
+            font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            font-size: 1.2rem;
+            color: var(--gold);
+            margin-bottom: 5px;
+        }
+
+        .today-label {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .mystery-type {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .mystery-type h2 {
+            font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .mystery-type-icon {
+            font-size: 2rem;
+        }
+
+        .mystery-type-description {
+            font-size: 1.1rem;
+            color: #6b5344;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        .mysteries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .mystery-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(201, 162, 39, 0.15);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .mystery-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+        }
+
+        .mystery-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(201, 162, 39, 0.15);
+            border-color: rgba(201, 162, 39, 0.4);
+        }
+
+        .mystery-image-container {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            position: relative;
+            background: linear-gradient(135deg, #f5f0e8 0%, #e8e0d5 100%);
+        }
+
+        .mystery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .mystery-card:hover .mystery-image {
+            transform: scale(1.1);
+        }
+
+        .mystery-number {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--gold) 0%, #a68520 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(201, 162, 39, 0.4);
+        }
+
+        .mystery-content {
+            padding: 25px;
+        }
+
+        .mystery-title {
+            font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            font-size: 1.3rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .mystery-versicle {
+            font-size: 0.95rem;
+            color: #5a5a5a;
+            font-style: italic;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(201, 162, 39, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid var(--gold);
+        }
+
+        .mystery-prayer {
+            font-size: 0.9rem;
+            color: #4a4a4a;
+            line-height: 1.7;
+        }
+
+        .prayers-section {
+            background: linear-gradient(145deg, #ffffff 0%, #f8f5f0 100%);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(201, 162, 39, 0.3);
+            margin-top: 40px;
+        }
+
+        .prayers-section h3 {
+            font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .prayer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .prayer-card {
+            background: rgba(201, 162, 39, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(201, 162, 39, 0.1);
+        }
+
+        .prayer-card h4 {
+            font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            color: #8b6914;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .prayer-card p {
+            font-size: 0.9rem;
+            color: #555555;
+            font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', 'Helvetica Neue', sans-serif;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            border-top: 1px solid rgba(201, 162, 39, 0.3);
+        }
+
+        footer p {
+            color: #8b6914;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .mystery-type h2 {
+                font-size: 1.8rem;
+            }
+
+            .mysteries-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 20px 15px;
+            }
+        }
+
+        .cross-decoration {
+            position: fixed;
+            font-size: 2rem;
+            opacity: 0.1;
+            color: var(--gold);
+        }
+
+        .cross-1 { top: 10%; left: 5%; }
+        .cross-2 { top: 20%; right: 5%; }
+        .cross-3 { bottom: 15%; left: 8%; }
+        .cross-4 { bottom: 25%; right: 8%; }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <span class="cross-decoration cross-1">✝</span>
+    <span class="cross-decoration cross-2">✝</span>
+    <span class="cross-decoration cross-3">✝</span>
+    <span class="cross-decoration cross-4">✝</span>
+
+    <div class="container">
+        <header>
+            <span class="rosary-icon">📿</span>
+            <h1>Santo Rosario</h1>
+            <p class="subtitle">Contempla los misterios de la fe</p>
+        </header>
+
+        <div class="today-info">
+            <p class="today-date" id="currentDate"></p>
+            <p class="today-label">Hoy contemplamos:</p>
+        </div>
+
+        <div class="mystery-type">
+            <h2>
+                <span class="mystery-type-icon" id="mysteryIcon">🌅</span>
+                <span id="mysteryTypeTitle">Misterios Gozosos</span>
+            </h2>
+            <p class="mystery-type-description" id="mysteryDescription">
+                Los Misterios Gozosos nos invitan a contemplar la dicha y la alegría del plan de Dios.
+            </p>
+        </div>
+
+        <div class="mysteries-grid" id="mysteriesGrid">
+        </div>
+
+        <div class="prayers-section">
+            <h3>Oraciones del Rosario</h3>
+            <div class="prayer-grid">
+                <div class="prayer-card">
+                    <h4>Padre Nuestro</h4>
+                    <p>"Padre nuestro que estás en el cielo, santificado sea tu nombre. Venga a nosotros tu reino. Hágase tu voluntad en la tierra como en el cielo. Danos hoy nuestro pan de cada día. Perdona nuestras ofensas como también nosotros perdonamos a quienes nos ofenden. No nos dejes caer en la tentación y libranos del mal. Amén."</p>
+                </div>
+                <div class="prayer-card">
+                    <h4>Ave María</h4>
+                    <p>"Dios te salve María, llena eres de gracia, el Señor es contigo. Bendita tú eres entre todas las mujeres y bendito es el fruto de tu vientre, Jesús. Santa María, Madre de Dios, ruega por nosotros pecadores ahora y en la hora de nuestra muerte. Amén."</p>
+                </div>
+                <div class="prayer-card">
+                    <h4>Dios te salve, Reina y Madre</h4>
+                    <p>"Dios te salve, Reina y Madre de misericordia, vida, dulzura y esperanza nuestra. Dios te salve. A Ti clamamos los desterrados hijos de Eva. A Ti suspiramos, gimiendo y llorando en este valle de lágrimas. Ea, pues, Señora, abógada nuestra, vuelve a nosotros esos tus ojos misericordiosos y después de este destierro muéstranos a Jesús, frutos bendito de tu vientre. Oh clemente, Oh piousa, Oh dulce Virgen María."</p>
+                </div>
+                <div class="prayer-card">
+                    <h4>Intenciones del Santo Padre</h4>
+                    <p>"Oh Dios, Pastor y Guía de todos los fieles, concédenos, por intercesión del Papa [nombre], favorecer los designios de tu misericordia, a fin de que el mundo entero persevere en una misma fe y en una misma praxis de caridad. Por Nuestro Señor."</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>🕊️ Que la Virgen María interceda por ti 🕊️</p>
+        </footer>
+    </div>
+
+    <script>
+        const mysteries = {
+            joyful: {
+                name: "Misterios Gozosos",
+                icon: "🌅",
+                description: "Los Misterios Gozosos nos invitan a contemplar la dicha y la alegría del plan de Dios en la encarnación de su Hijo.",
+                items: [
+                    {
+                        title: "La Anunciación",
+                        image: "https://antonioalamo.github.io/santo-rosario/gozoso1.jpg",
+                        versicle: "El ángel Gabriel fue enviado a una virgen comprometida con José...",
+                        prayer: "María, Madre nuestra, ayúdanos a recibir con humildad la voluntad de Dios."
+                    },
+                    {
+                        title: "La Visitación",
+                        image: "https://antonioalamo.github.io/santo-rosario/gozoso2.jpg",
+                        versicle: "María se levantó y fue con prisa a las montañas de Judá...",
+                        prayer: "Señor, concédenos el espíritu de servicio para ayudar a nuestros hermanos."
+                    },
+                    {
+                        title: "El Nacimiento de Jesús",
+                        image: "https://antonioalamo.github.io/santo-rosario/gozoso3.jpg",
+                        versicle: "Y dio a luz a su hijo primogénito, lo envolvió en pañales...",
+                        prayer: "Jesús, Emanuel, Dios con nosotros, ilumina nuestro corazón."
+                    },
+                    {
+                        title: "La Presentación de Jesús",
+                        image: "https://antonioalamo.github.io/santo-rosario/gozoso4.jpg",
+                        versicle: "Simeón tomó al niño en sus brazos y bendijo a Dios...",
+                        prayer: "Señor, enséñanos a ofrecer nuestras vidas completamente a ti."
+                    },
+                    {
+                        title: "El Niño Perdido y Hallado",
+                        image: "https://antonioalamo.github.io/santo-rosario/gozoso5.jpg",
+                        versicle: "Después de tres días lo encontraron en el templo...",
+                        prayer: "María, guía nuestros pasos cuando nos sintamos perdidos."
+                    }
+                ]
+            },
+            sorrowful: {
+                name: "Misterios Dolorosos",
+                icon: "🩸",
+                description: "Los Misterios Dolorosos nos invitan a contemplar el sufrimiento de Cristo como camino de salvación.",
+                items: [
+                    {
+                        title: "La Oración en el Huerto",
+                        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhw2CL9nGb0bOaCoHnOLK2H1uimrq1UTFYkkK-ez8H5maJAKDc6z0avuO1tKMfwq-d1-RMigByJ3lnnzd4rk0QSw8sYOp47AqTVYC_74AqPmPFyRybO-THxZF4eY_RUjihqIGC_RyykHccR/s1600/Dolorosos1.jpg",
+                        versicle: "Jesús dijo: 'Mi alma está triste hasta la muerte'...",
+                        prayer: "Señor, ayúdanos a aceptar tu voluntad en nuestros momentos de angustia."
+                    },
+                    {
+                        title: "La Flagelación",
+                        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhK4uyrqy2VCDJ6bRzjUjUc99aAZj8c02RwXbshdOIU6kgq3N_zMOnb1d166-fyn6INresDlpeDY-Zp8qXn1f0RdzYi8EKt_ODhJxWYecYH89h97C9UJJE5nd_soqnXgWXSfWep7FQcXJ9w/s1600/Dolorosos.5.jpg",
+                        versicle: "Pilato hizo azotar a Jesús y los soldados tejieron una corona de espinas...",
+                        prayer: "Jesús, por tu pasión y muerte, libéranos del pecado."
+                    },
+                    {
+                        title: "La Coronación de Espinas",
+                        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgH6L9zmjDYmw20wEloyI85gE2RzNLSwXVQM8YCsL2IO8WK0TFZHNuLwVf_M0P2NaHqHb1ch5EVFss0bQSrOqL28_lnUFEXFkoaWIu-kMr-7GGYSfhqGzqdCMMD5YNo4RKmwUOh7z9GIeUB/s640/Dolorosos.7.jpg",
+                        versicle: "Los soldados le pusieron un manto de púrpura y una corona de espinas...",
+                        prayer: "Señor, concédenos la humildad para aceptar las pruebas de la vida."
+                    },
+                    {
+                        title: "El Camino del Calvario",
+                        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEirL3U29MjTjubArCArBn96wtLpfpJ4zrBDKz2-F6tMzGjtv1DbLRq3VcktsNyRnxY1Y8RS1hDhWtSWnQjBlAxC9c-MJbXkEeY4DXosI2u-nPIpH71YoElKSVc76tbp6iYNPVInxlt-vkkO/s640/Dolorosos+6.jpg",
+                        versicle: "Y cargando la cruz, salió al lugar llamado Calvario...",
+                        prayer: "Jesús, enséñanos a cargar nuestra cruz diaria con paciencia."
+                    },
+                    {
+                        title: "La Crucifixión y Muerte",
+                        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjRbrLdH3Y5dhKTU4Ap1kH8N1UQJVxd2LurOVXYwz-ofbk0iEValz8aZVm1H_qeNM3dNTBueT3evhvFTvucjnIihybOIckNiDJddi_LtzqKj9-QShL5gN-Ahi6FUjnafgrZeECDMF1Yjl3x/s640/Dolorosos.8.jpg",
+                        versicle: "Jesús clamó: 'Padre, en tus manos encomiendo mi espíritu'...",
+                        prayer: "Señor, por tu muerte en la cruz, ten misericordia de nosotros."
+                    }
+                ]
+            },
+            glorious: {
+                name: "Misterios Gloriosos",
+                icon: "✨",
+                description: "Los Misterios Gloriosos nos invitan a contemplar la victoria de Cristo sobre la muerte.",
+                items: [
+                    {
+                        title: "La Resurrección",
+                        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEglalLn2abVsNs-ztSWESx56dmOuDjOjVGueqDcc7JXsCzIstZplHx1q456bgHkDdI5CSHW3Y6gMZUNs0qqZeqGdicdhEgEbdOfC-Hc5DRMhkYPAIVuPOgtlbe_bhw800VI1DwTO4Ff2dB7/s1600/Gloriosos23.jpg",
+                        versicle: "No está aquí, ha resucitado como dijo. Vengan y vean...",
+                        prayer: "Señor resucitado, renueva nuestra esperanza y haznos testigos de tu vida."
+                    },
+                    {
+                        title: "La Ascensión",
+                        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEheKesCpZtrdSO_JDXjo0eIQ9a4hpa3DEy1N7qxTiypJkUCprcvNjtiokiYEKj-7p5b8Bg3ExHvvsrH5UX2haYo6BhUqAYuWco1SM23aVlHEZ8tyMKXw9Trd09aUoDcbscVoLLI6yf04ojJ/s1600/Gloriosos_1.jpg",
+                        versicle: "Fue elevado al cielo y se sentó a la derecha de Dios...",
+                        prayer: "Jesús, guía nuestros pasos hacia el cielo."
+                    },
+                    {
+                        title: "La Venida del Espíritu Santo",
+                        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg5YfrokQEybgxluFAKfpc8l7JJahfwoiGaJt7D8pxHRaxoQd4Nl1nsz-WnFH5_KccwPw4D6EoDUjHDDfKRFu4wADdB0oPuFg1arOHKMczYv3WYSEaW5TXjorbHc1M5OUdCsvpRp6EVlPqk/s1600/Gloriosos+3.jpg",
+                        versicle: "De pronto vino del cielo un ruido como de un viento recio...",
+                        prayer: "Espíritu Santo, llena nuestro corazón de tus dones."
+                    },
+                    {
+                        title: "La Asunción de María",
+                        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiWLFkg7EkVaWSj2jxsxOZs8rIS4EVc629v_p_Z_aWadvyjwGG8nSJD1dP8A15nThsfxRf4RXoFTFub8IvuMe8t1bCk3CwdAlflAcURlU7L1wOalx1pJesMb8Fq-DbEvXhKesOrLtiyvFK5/s640/Gloriosos+15.jpg",
+                        versicle: "María fue asumida en cuerpo y alma a la gloria del cielo...",
+                        prayer: "María, Madre nuestra, ruega por nosotros."
+                    },
+                    {
+                        title: "La Coronación de María",
+                        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgqk0ip63kzLcOIxbKtXDoBiOkX62TjyyT7QS4ouvSAbwPJT07YmjpFkydeN-u_uxWAtgSf_Rw-GGyVEszOMykA9HhUXEWZcZsQWTnoWWcqHSh-lJqpgMyxAmJpCQ5yPDRWKbfQskEzPUiK/s640/Gloriosos+.09.jpg",
+                        versicle: "Una gran señal apareció en el cielo: una mujer coronada de estrellas...",
+                        prayer: "Reina del cielo, guía nuestra vida hacia la gloria eterna."
+                    }
+                ]
+            },
+            luminous: {
+                name: "Misterios Luminosos",
+                icon: "🌟",
+                description: "Los Misterios Luminosos nos revelan el rostro luminoso de Cristo.",
+                items: [
+                    {
+                        title: "El Bautismo en el Jordán",
+                        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiexQ00_keUYp52e4LFnUlmgeDY405CC-J9BWtxw6ZVRUBckSmTU4bSbbsrFscZdXWoHGsBE2RqifOA8OUTKcdg7_cVgZvWBFQsRzpCYdvRW4QKw5zAi9rQezWQ0UYpzNFm6t9pmsGk6wdU/s640/1.+Luminosos.jpg",
+                        versicle: "El cielo se abrió y el Espíritu Santo descendió sobre él...",
+                        prayer: "Señor, bautízanos en tu Espíritu para ser hijos de luz."
+                    },
+                    {
+                        title: "Las Bodas de Caná",
+                        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgFPf4P42BtNlMqb4MDOpo-Cv9eyT6wLrweZQt9KdM6mMquQzptfooFju6RiuHc8Ye4EZeFtNCPkcFWUfBUPO5XjH937KU2c3SK7MgF6xZFqsajLjGP2fE1SBnPTzbqb6oPvW7JKMuh5wNJ/s1600/2.Luminosos.jpg",
+                        versicle: "Jesús transformó el agua en vino, este fue el primer signo de su gloria...",
+                        prayer: "Jesús, manifiesta tu gloria y bendice nuestro hogar."
+                    },
+                    {
+                        title: "La Predicación del Reino",
+                        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhMTGQ7ueG3ie71NfRc7GqmsAsVJE1YmvDayia8PHd-a6c8RfBnCXrS8Ch48pg4GTXRNv-NIgYyuVZC_8Yby6jfvG_WxnjPAzPxIln3C1lDMC0uv4gyvB-ROu2SgHdpVTwPmZnORsv5ly4A/s1600/3.jpg",
+                        versicle: "El tiempo se ha cumplido y el Reino de Dios está cerca...",
+                        prayer: "Señor, concédenos ser heraldos de tu Reino de amor."
+                    },
+                    {
+                        title: "La Transfiguración",
+                        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjmn8FoX0BsZkj1pu_yB_bpat6LTM6vnh9N0yGaEpmGd_Jex2qcvI2wA8nMnPKq-1y131UAjIzbkVGiCBnTS8vlO8RtkW2Paus2ir9uHXMEBZNHb8PVQyw92DC17aaZoYxD0oXztavNWvgS/s640/4.jpg",
+                        versicle: "Su rostro resplandeció como el sol y sus vestiduras se volvieron blancas...",
+                        prayer: "Señor, transforma nuestro corazón para que brille tu luz."
+                    },
+                    {
+                        title: "La Eucaristía",
+                        image: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhP0OntOgCSwAmecnDJ25CMfF9VUFN7-ALUGCDpuyHvu-s8QQHdRU937VEXf4G-k-eZfyG-uLfxSt5zgFyDg_5JQFeQUFI8LITqofHr_HdPIG6DGZtkVWpaRfUWOEQJZPpoZN7uVyW2sj7k/s640/5.jpg",
+                        versicle: "Yo soy el pan vivo que bajó del cielo...",
+                        prayer: "Jesús, pan del cielo, alimenta nuestras almas."
+                    }
+                ]
+            }
+        };
+
+        function getMysteryType() {
+            const today = new Date();
+            const dayOfWeek = today.getDay();
+
+            const mysteryByDay = {
+                0: 'glorious',
+                1: 'joyful',
+                2: 'sorrowful',
+                3: 'glorious',
+                4: 'luminous',
+                5: 'sorrowful',
+                6: 'joyful'
+            };
+
+            return mysteryByDay[dayOfWeek];
+        }
+
+        function formatDate() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            return now.toLocaleDateString('es-ES', options);
+        }
+
+        function renderMysteries() {
+            const mysteryType = getMysteryType();
+            const data = mysteries[mysteryType];
+
+            document.getElementById('currentDate').textContent = formatDate();
+
+            document.getElementById('mysteryTypeTitle').textContent = data.name;
+            document.getElementById('mysteryIcon').textContent = data.icon;
+            document.getElementById('mysteryDescription').textContent = data.description;
+
+            const grid = document.getElementById('mysteriesGrid');
+            grid.innerHTML = '';
+
+            data.items.forEach((mystery, index) => {
+                const card = document.createElement('div');
+                card.className = 'mystery-card';
+                card.innerHTML = `
+                    <div class="mystery-image-container">
+                        <div class="mystery-number">${index + 1}</div>
+                        <img src="${mystery.image}" alt="${mystery.title}" class="mystery-image" 
+                             onerror="this.src='https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=300&fit=crop'">
+                    </div>
+                    <div class="mystery-content">
+                        <h3 class="mystery-title">${mystery.title}</h3>
+                        <div class="mystery-versicle">${mystery.versicle}</div>
+                        <p class="mystery-prayer">${mystery.prayer}</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderMysteries);
+    </script>
+</body>
+</html>
