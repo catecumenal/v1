@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Sol y cruz">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f7f1e4"/>
+      <stop offset="1" stop-color="#fbf7ec"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <g stroke="#d9a93c" stroke-width="2.5" stroke-linecap="round" opacity="0.6">
+    <line x1="32" y1="4" x2="32" y2="9"/>
+    <line x1="55" y1="27" x2="60" y2="27"/>
+    <line x1="9" y1="27" x2="4" y2="27"/>
+    <line x1="52" y1="12" x2="48" y2="16"/>
+    <line x1="12" y1="12" x2="16" y2="16"/>
+  </g>
+  <circle cx="32" cy="28" r="15" fill="#f2b63d"/>
+  <circle cx="32" cy="28" r="17" fill="none" stroke="#d99a2b" stroke-width="1.5" opacity="0.6"/>
+  <path fill="#2f5e9e" d="M29 8 h6 v11 h9 v6 h-9 v23 h-6 V25 h-9 v-6 h9 z"/>
+</svg>
